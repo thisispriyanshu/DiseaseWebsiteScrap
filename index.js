@@ -7,7 +7,8 @@ const dotenv=require('dotenv');
 dotenv.config({path:'./config.env'})
 const PORT=process.env.PORT
 require('./database/conn');
-const xpath=require('xpath-html')
+const xpath=require('xpath-html');
+const { count } = require("./models/diseaseSchema");
 const mayo_url="https://www.mayoclinic.org/diseases-conditions/acl-injury/symptoms-causes/syc-20350738";
 
 // for (let i = 0; i < 26; i++) {
@@ -53,9 +54,9 @@ function extractDetails(html) {
   // console.log(diseaseOverview)
     let diseaseAddedBy="Priyanshu";
     const disease=new Disease({name,generalInfo,diseaseAddedBy});
-    // disease.save();
-    // setTimeout(()=>{
-      // console.log("Adding Data")},2000)
+    disease.save();
+    setTimeout(()=>{
+      console.log("Adding Data")},2000)
 }
 
 function TimesOfIndiaDetails(html){
@@ -83,19 +84,18 @@ function getDetails(fullLink) {
 function MayoClinicDetails(html){
     let $=cheerio.load(html);
     let name=$('div[class="row"] > h1').text();
-    console.log(name) 
-    // let text_heading=$('div[class="content"] > div > h2');
-    // for (let index = 0; index < text_heading.length; index++) {
-    //   let element = text_heading[index];
-    //   let heading=$(element).text();
-    //   console.log(heading);
-    // }
+    // console.log(name);
     let p_text=$('div[class="row"] > div[class="content"] > div > p')
     for (let index = 0; index < p_text.length; index++) {
       let element = p_text[index];
-      let heading=$(element).text();
-      console.log(heading);
-      console.log("=======================================")
+      let generalInfo=$(element).text();
+      let diseaseAddedBy="Priyanshu";
+    const disease=new Disease({name,generalInfo,diseaseAddedBy});
+    disease.save();
+    setTimeout(()=>{
+      console.log("Adding Data")},2000)
+      // console.log(heading);
+      // console.log("=======================================")
     }
     // console.log(p_text);
 }
